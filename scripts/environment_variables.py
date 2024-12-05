@@ -36,7 +36,8 @@ def resolve_variables(variables):
                 value = value.replace(f"${ref_key}", "None")
                 break
             value = value.replace(f"${ref_key}", resolve(ref_key))
-            print(f'value = {value}')
+        if value.startswith(("'", '"')) and value.endswith(("'", '"')):
+            value = value[1:-1]
         return value
 
     for key in variables:
@@ -53,11 +54,6 @@ def replace_variables(cfg_path, resolved_vars, output_path):
     
     with open(output_path, 'w') as output_file:
         output_file.write(content)
-
-# File paths
-# cshrc_file = 'path_to_your_cshrc'
-# config_file = 'path_to_your_config.cfg'
-# new_config_file = f"{os.path.splitext(config_file)[0]}_updated.cfg"  # E.g., config_updated.cfg
 
 parser = argparse.ArgumentParser(description="Replace environment variables")
 parser.add_argument("-cshrc_file", required=True, help="Path to the input cshrc file")
